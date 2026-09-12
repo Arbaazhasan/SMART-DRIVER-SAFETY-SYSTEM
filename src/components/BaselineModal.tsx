@@ -130,20 +130,20 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
           <div style={{
-            background: 'rgba(0, 240, 255, 0.15)',
-            color: '#00f0ff',
+            background: '#f0f9ff',
+            color: '#0284c7',
             padding: '0.6rem',
             borderRadius: '10px',
-            border: '1px solid rgba(0, 240, 255, 0.3)'
+            border: '1px solid #bae6fd'
           }}>
             <UserCheck size={26} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a' }}>
               Driver Baseline Calibration
             </h2>
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-              Requirement #1: Capture baseline facial state before driving mode begins
+            <p style={{ fontSize: '0.85rem', color: '#64748b' }}>
+              Capture baseline facial reference state before drive monitoring begins
             </p>
           </div>
         </div>
@@ -159,8 +159,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
             <div key={s} style={{
               height: '6px',
               borderRadius: '4px',
-              background: s <= step ? 'linear-gradient(90deg, #00f0ff, #00e676)' : 'rgba(255, 255, 255, 0.1)',
-              boxShadow: s <= step ? '0 0 8px rgba(0, 240, 255, 0.5)' : 'none',
+              background: s <= step ? 'linear-gradient(90deg, #0284c7, #16a34a)' : '#e2e8f0',
+              boxShadow: s <= step ? '0 2px 6px rgba(2, 132, 199, 0.3)' : 'none',
               transition: 'all 0.3s ease'
             }} />
           ))}
@@ -168,8 +168,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
 
         {/* Status Text Box */}
         <div style={{
-          background: 'rgba(0, 240, 255, 0.08)',
-          border: '1px solid rgba(0, 240, 255, 0.25)',
+          background: '#f0f9ff',
+          border: '1px solid #bae6fd',
           padding: '0.75rem 1rem',
           borderRadius: '8px',
           marginBottom: '1.25rem',
@@ -177,9 +177,10 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
           alignItems: 'center',
           gap: '0.6rem',
           fontSize: '0.88rem',
-          color: '#e2e8f0'
+          color: '#0284c7',
+          fontWeight: 600
         }}>
-          <Sparkles size={18} color="#00f0ff" />
+          <Sparkles size={18} color="#0284c7" />
           <span>{statusText}</span>
         </div>
 
@@ -190,8 +191,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
           height: '320px',
           borderRadius: '12px',
           overflow: 'hidden',
-          background: '#0a0d14',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          background: '#f1f5f9',
+          border: '1px solid #cbd5e1',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
@@ -210,7 +211,7 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                border: '2px dashed rgba(0, 240, 255, 0.4)',
+                border: '2px dashed #0284c7',
                 margin: '2rem',
                 borderRadius: '50%',
                 pointerEvents: 'none',
@@ -219,13 +220,13 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
                 justifyContent: 'center'
               }}>
                 <div style={{
-                  color: isFaceDetected ? '#00e676' : '#ffd600',
+                  color: isFaceDetected ? '#16a34a' : '#d97706',
                   fontSize: '0.82rem',
                   fontWeight: 700,
-                  background: 'rgba(10, 15, 26, 0.85)',
+                  background: 'rgba(255, 255, 255, 0.92)',
                   padding: '0.3rem 0.8rem',
                   borderRadius: '16px',
-                  border: `1px solid ${isFaceDetected ? '#00e676' : '#ffd600'}`
+                  border: `1px solid ${isFaceDetected ? '#16a34a' : '#d97706'}`
                 }}>
                   {isFaceDetected ? '🟢 FACE ALIGNED' : '🟡 ALIGN FACE IN CIRCLE'}
                 </div>
@@ -243,22 +244,22 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
                 bottom: '1rem',
                 left: '1rem',
                 right: '1rem',
-                background: 'rgba(10, 15, 26, 0.9)',
+                background: 'rgba(255, 255, 255, 0.92)',
                 backdropFilter: 'blur(8px)',
                 padding: '0.6rem 1rem',
                 borderRadius: '8px',
-                border: '1px solid rgba(0, 230, 118, 0.4)',
+                border: '1px solid #16a34a',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                color: '#00e676',
+                color: '#16a34a',
                 fontSize: '0.85rem',
                 fontWeight: 700
               }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                   <CheckCircle2 size={16} /> Baseline Image Captured & Stored
                 </span>
-                <span style={{ color: '#00f0ff', fontFamily: 'monospace' }}>EAR: 0.35 | EYE: OPEN</span>
+                <span style={{ color: '#0284c7', fontFamily: 'monospace' }}>EAR: 0.35 | EYE: OPEN</span>
               </div>
             </div>
           )}
@@ -272,17 +273,17 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
             gap: '0.75rem',
             marginTop: '1rem'
           }}>
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Baseline EAR</div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#00f0ff' }}>0.35 (Normal)</div>
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Baseline EAR</div>
+              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#0284c7' }}>0.35 (Normal)</div>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Baseline Pose</div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#00e676' }}>Centered (0°)</div>
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Baseline Pose</div>
+              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#16a34a' }}>Centered (0°)</div>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Baseline Eye State</div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#00e676' }}>OPEN</div>
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '0.6rem', borderRadius: '8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Baseline Eye State</div>
+              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#16a34a' }}>OPEN</div>
             </div>
           </div>
         )}
@@ -292,8 +293,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
           <button
             onClick={onCancel}
             style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              color: '#94a3b8',
+              background: '#f1f5f9',
+              color: '#64748b',
               padding: '0.65rem 1.25rem',
               borderRadius: '8px',
               fontWeight: 600,
@@ -308,8 +309,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
               onClick={handleCaptureBaseline}
               disabled={step < 3}
               style={{
-                background: step >= 3 ? 'linear-gradient(135deg, #00f0ff 0%, #0077ff 100%)' : 'rgba(255, 255, 255, 0.1)',
-                color: step >= 3 ? '#090c15' : '#64748b',
+                background: step >= 3 ? 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)' : '#e2e8f0',
+                color: step >= 3 ? '#ffffff' : '#94a3b8',
                 padding: '0.65rem 1.4rem',
                 borderRadius: '8px',
                 fontWeight: 700,
@@ -327,8 +328,8 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
               onClick={handleConfirmAndStart}
               disabled={step < 6}
               style={{
-                background: step >= 6 ? 'linear-gradient(135deg, #00e676 0%, #00b0ff 100%)' : 'rgba(255, 255, 255, 0.1)',
-                color: step >= 6 ? '#090c15' : '#64748b',
+                background: step >= 6 ? 'linear-gradient(135deg, #16a34a 0%, #0284c7 100%)' : '#e2e8f0',
+                color: step >= 6 ? '#ffffff' : '#94a3b8',
                 padding: '0.65rem 1.4rem',
                 borderRadius: '8px',
                 fontWeight: 700,
@@ -336,7 +337,7 @@ export const BaselineModal: React.FC<BaselineModalProps> = ({ onCompleteBaseline
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                boxShadow: step >= 6 ? '0 0 20px rgba(0, 230, 118, 0.4)' : 'none',
+                boxShadow: step >= 6 ? '0 4px 14px rgba(22, 163, 74, 0.3)' : 'none',
                 cursor: step >= 6 ? 'pointer' : 'not-allowed'
               }}
             >

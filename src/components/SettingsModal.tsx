@@ -38,40 +38,40 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
-              background: 'rgba(0, 240, 255, 0.15)',
-              color: '#00f0ff',
+              background: '#f0f9ff',
+              color: '#0284c7',
               padding: '0.6rem',
               borderRadius: '10px',
-              border: '1px solid rgba(0, 240, 255, 0.3)'
+              border: '1px solid #bae6fd'
             }}>
               <SettingsIcon size={26} />
             </div>
             <div>
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>
-                System & Exhibition Settings
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a' }}>
+                System & Simulation Settings
               </h2>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+              <p style={{ fontSize: '0.82rem', color: '#64748b' }}>
                 Configure thresholds, emergency contacts, and audio alarms
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'rgba(255, 255, 255, 0.08)', border: 'none', color: '#ffffff', padding: '0.4rem', borderRadius: '50%' }}
+            style={{ background: '#f1f5f9', border: 'none', color: '#64748b', padding: '0.4rem', borderRadius: '50%' }}
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Section 1: Drowsiness Thresholds (Req #2) */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#00f0ff', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        {/* Section 1: Drowsiness Thresholds */}
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0284c7', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <Bell size={18} /> Drowsiness Detection Thresholds
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>
+              <label style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
                 Warning Eye Closure (Sec): {thresholds.eyeClosureDurationWarning}s
               </label>
               <input
@@ -86,7 +86,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             </div>
 
             <div>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>
+              <label style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
                 Critical Eye Closure (Sec): {thresholds.eyeClosureDurationCritical}s
               </label>
               <input
@@ -101,7 +101,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             </div>
 
             <div>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>
+              <label style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
                 Repeated Closure Count: {thresholds.repeatedClosureCount} times
               </label>
               <input
@@ -116,7 +116,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             </div>
 
             <div>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>
+              <label style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
                 Head Tilt Threshold: {thresholds.headTiltAngleDeg}°
               </label>
               <input
@@ -132,15 +132,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
           </div>
         </div>
 
-        {/* Section 2: Audio & Alarm Buzzer (Req #15) */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#00e676', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        {/* Section 2: Audio & Alarm Buzzer */}
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#16a34a', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <Volume2 size={18} /> Alarm Audio & Volume Controls
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1rem' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>
+              <label style={{ fontSize: '0.78rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
                 Alarm Volume: {Math.round(thresholds.alarmVolume * 100)}%
               </label>
               <input
@@ -160,9 +160,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             <button
               onClick={() => handleTestAlarm('warning')}
               style={{
-                background: 'rgba(255, 214, 0, 0.15)',
-                border: '1px solid #ffd600',
-                color: '#ffd600',
+                background: '#fffbeb',
+                border: '1px solid #fde68a',
+                color: '#d97706',
                 padding: '0.45rem 0.85rem',
                 borderRadius: '6px',
                 fontSize: '0.78rem',
@@ -175,9 +175,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             <button
               onClick={() => handleTestAlarm('critical')}
               style={{
-                background: 'rgba(255, 23, 68, 0.15)',
-                border: '1px solid #ff1744',
-                color: '#ff1744',
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#dc2626',
                 padding: '0.45rem 0.85rem',
                 borderRadius: '6px',
                 fontSize: '0.78rem',
@@ -190,9 +190,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
             <button
               onClick={() => handleTestAlarm('emergency')}
               style={{
-                background: 'rgba(0, 240, 255, 0.15)',
-                border: '1px solid #00f0ff',
-                color: '#00f0ff',
+                background: '#f0f9ff',
+                border: '1px solid #bae6fd',
+                color: '#0284c7',
                 padding: '0.45rem 0.85rem',
                 borderRadius: '6px',
                 fontSize: '0.78rem',
@@ -204,46 +204,46 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
           </div>
         </div>
 
-        {/* Section 3: Emergency Contacts (Req #8) */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ffd600', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        {/* Section 3: Emergency Contacts */}
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '1.2rem', borderRadius: '10px', marginBottom: '1.25rem' }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#d97706', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <Phone size={18} /> Configurable Emergency Contact Info
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             {/* Contact */}
             <div>
-              <label style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Emergency Contact Name</label>
+              <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Emergency Contact Name</label>
               <input
                 type="text"
                 value={contact.name}
                 onChange={e => setContact({ ...contact, name: e.target.value })}
-                style={{ width: '100%', background: '#0a0d14', border: '1px solid rgba(255,255,255,0.15)', padding: '0.45rem', borderRadius: '6px', color: '#fff', marginTop: '0.2rem' }}
+                style={{ width: '100%', background: '#ffffff', border: '1px solid #cbd5e1', padding: '0.45rem', borderRadius: '6px', color: '#0f172a', marginTop: '0.2rem' }}
               />
-              <label style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem', display: 'block' }}>Contact Phone</label>
+              <label style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem', display: 'block' }}>Contact Phone</label>
               <input
                 type="text"
                 value={contact.phone}
                 onChange={e => setContact({ ...contact, phone: e.target.value })}
-                style={{ width: '100%', background: '#0a0d14', border: '1px solid rgba(255,255,255,0.15)', padding: '0.45rem', borderRadius: '6px', color: '#fff', marginTop: '0.2rem' }}
+                style={{ width: '100%', background: '#ffffff', border: '1px solid #cbd5e1', padding: '0.45rem', borderRadius: '6px', color: '#0f172a', marginTop: '0.2rem' }}
               />
             </div>
 
             {/* Help Hotline */}
             <div>
-              <label style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Help / Emergency Number Name</label>
+              <label style={{ fontSize: '0.75rem', color: '#64748b' }}>Help / Emergency Number Name</label>
               <input
                 type="text"
                 value={help.name}
                 onChange={e => setHelp({ ...help, name: e.target.value })}
-                style={{ width: '100%', background: '#0a0d14', border: '1px solid rgba(255,255,255,0.15)', padding: '0.45rem', borderRadius: '6px', color: '#fff', marginTop: '0.2rem' }}
+                style={{ width: '100%', background: '#ffffff', border: '1px solid #cbd5e1', padding: '0.45rem', borderRadius: '6px', color: '#0f172a', marginTop: '0.2rem' }}
               />
-              <label style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem', display: 'block' }}>Help Hotline Phone</label>
+              <label style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem', display: 'block' }}>Help Hotline Phone</label>
               <input
                 type="text"
                 value={help.phone}
                 onChange={e => setHelp({ ...help, phone: e.target.value })}
-                style={{ width: '100%', background: '#0a0d14', border: '1px solid rgba(255,255,255,0.15)', padding: '0.45rem', borderRadius: '6px', color: '#fff', marginTop: '0.2rem' }}
+                style={{ width: '100%', background: '#ffffff', border: '1px solid #cbd5e1', padding: '0.45rem', borderRadius: '6px', color: '#0f172a', marginTop: '0.2rem' }}
               />
             </div>
           </div>
@@ -253,15 +253,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave })
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
           <button
             onClick={onClose}
-            style={{ background: 'rgba(255, 255, 255, 0.08)', color: '#94a3b8', padding: '0.65rem 1.25rem', borderRadius: '8px', fontWeight: 600 }}
+            style={{ background: '#f1f5f9', color: '#64748b', padding: '0.65rem 1.25rem', borderRadius: '8px', fontWeight: 600 }}
           >
             Cancel
           </button>
           <button
             onClick={handleSaveAll}
             style={{
-              background: saveSuccess ? '#00e676' : 'linear-gradient(135deg, #00f0ff 0%, #0077ff 100%)',
-              color: '#090c15',
+              background: saveSuccess ? '#16a34a' : 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+              color: '#ffffff',
               padding: '0.65rem 1.4rem',
               borderRadius: '8px',
               fontWeight: 800,

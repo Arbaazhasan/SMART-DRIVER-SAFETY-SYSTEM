@@ -1,14 +1,15 @@
 import React from 'react';
-import { AlertCircle, GraduationCap } from 'lucide-react';
+import { AlertCircle, ShieldCheck } from 'lucide-react';
 
 export const DisclaimerFooter: React.FC = () => {
   return (
     <footer style={{
       marginTop: '2rem',
       padding: '1.25rem 1.5rem',
-      background: 'rgba(10, 15, 26, 0.95)',
-      borderTop: '1px solid rgba(0, 240, 255, 0.15)',
+      background: '#ffffff',
+      borderTop: '1px solid #e2e8f0',
       borderRadius: '12px 12px 0 0',
+      boxShadow: '0 -2px 10px rgba(15, 23, 42, 0.03)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -16,26 +17,26 @@ export const DisclaimerFooter: React.FC = () => {
       gap: '1rem'
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '300px' }}>
-        <AlertCircle size={22} color="#ffd600" style={{ flexShrink: 0 }} />
-        <p style={{ fontSize: '0.78rem', color: '#94a3b8', lineHeight: '1.4' }}>
-          <strong style={{ color: '#ffd600' }}>SCIENTIFIC EXHIBITION DISCLAIMER (REQ #20):</strong>{' '}
-          "This project is a prototype designed to demonstrate driver fatigue monitoring and emergency response for a Class 11 Science Exhibition. It is not a certified automotive safety system or medical diagnostic system."
+        <AlertCircle size={22} color="#d97706" style={{ flexShrink: 0 }} />
+        <p style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: '1.4' }}>
+          <strong style={{ color: '#0f172a' }}>SYSTEM NOTICE:</strong>{' '}
+          "Smart Driver Safety System is an automated driver fatigue monitoring and emergency assistance application. Ensure proper camera calibration and vehicle safety compliance."
         </p>
       </div>
 
       <div style={{
         fontSize: '0.78rem',
-        color: '#00f0ff',
+        color: '#0284c7',
         fontWeight: 700,
-        background: 'rgba(0, 240, 255, 0.1)',
+        background: '#f0f9ff',
         padding: '0.4rem 0.8rem',
         borderRadius: '6px',
-        border: '1px solid rgba(0, 240, 255, 0.25)',
+        border: '1px solid #bae6fd',
         display: 'flex',
         alignItems: 'center',
         gap: '0.4rem'
       }}>
-        <GraduationCap size={16} /> CLASS 11 SCIENCE PROJECT PROTOTYPE
+        <ShieldCheck size={16} /> SMART DRIVER SAFETY SYSTEM
       </div>
     </footer>
   );

@@ -39,26 +39,26 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
-              background: 'rgba(0, 240, 255, 0.15)',
-              color: '#00f0ff',
+              background: '#f0f9ff',
+              color: '#0284c7',
               padding: '0.6rem',
               borderRadius: '10px',
-              border: '1px solid rgba(0, 240, 255, 0.3)'
+              border: '1px solid #bae6fd'
             }}>
               <History size={26} />
             </div>
             <div>
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a' }}>
                 Safety Event Audit Log
               </h2>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
-                Requirement #16: Complete timestamped log of drowsiness & emergency events
+              <p style={{ fontSize: '0.82rem', color: '#64748b' }}>
+                Complete timestamped log of drowsiness & emergency events
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'rgba(255, 255, 255, 0.08)', border: 'none', color: '#ffffff', padding: '0.4rem', borderRadius: '50%' }}
+            style={{ background: '#f1f5f9', border: 'none', color: '#64748b', padding: '0.4rem', borderRadius: '50%' }}
           >
             <X size={20} />
           </button>
@@ -66,17 +66,17 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
 
         {/* Action Controls */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-            Total Events Logged: <strong style={{ color: '#00f0ff' }}>{events.length}</strong>
+          <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
+            Total Events Logged: <strong style={{ color: '#0284c7' }}>{events.length}</strong>
           </span>
 
           <button
             onClick={handleExportCSV}
             disabled={events.length === 0}
             style={{
-              background: 'rgba(0, 240, 255, 0.15)',
-              border: '1px solid rgba(0, 240, 255, 0.3)',
-              color: '#00f0ff',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              color: '#0284c7',
               padding: '0.45rem 0.85rem',
               borderRadius: '6px',
               fontSize: '0.78rem',
@@ -94,13 +94,14 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
         <div style={{
           maxHeight: '340px',
           overflowY: 'auto',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          overflowX: 'auto',
+          border: '1px solid #e2e8f0',
           borderRadius: '8px',
-          background: 'rgba(10, 15, 26, 0.6)'
+          background: '#ffffff'
         }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
             <thead>
-              <tr style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#94a3b8', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <tr style={{ background: '#f8fafc', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>
                 <th style={{ padding: '0.65rem 0.85rem' }}>Time</th>
                 <th style={{ padding: '0.65rem 0.85rem' }}>Event</th>
                 <th style={{ padding: '0.65rem 0.85rem' }}>Severity</th>
@@ -111,17 +112,17 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
             <tbody>
               {events.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>
-                    No safety events logged yet. Start drive or run exhibition demo.
+                  <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                    No safety events logged yet. Start a drive session or run a simulation.
                   </td>
                 </tr>
               ) : (
                 events.map(ev => (
-                  <tr key={ev.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                    <td style={{ padding: '0.65rem 0.85rem', fontFamily: 'monospace', color: '#00f0ff' }}>
+                  <tr key={ev.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '0.65rem 0.85rem', fontFamily: 'monospace', color: '#0284c7', fontWeight: 600 }}>
                       {ev.timestamp}
                     </td>
-                    <td style={{ padding: '0.65rem 0.85rem', fontWeight: 700, color: '#ffffff' }}>
+                    <td style={{ padding: '0.65rem 0.85rem', fontWeight: 700, color: '#0f172a' }}>
                       {ev.eventType}
                     </td>
                     <td style={{ padding: '0.65rem 0.85rem' }}>
@@ -130,14 +131,14 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
                         borderRadius: '4px',
                         fontSize: '0.72rem',
                         fontWeight: 800,
-                        background: ev.severity === 'Critical' ? 'rgba(255, 23, 68, 0.2)' : ev.severity === 'Warning' ? 'rgba(255, 214, 0, 0.2)' : 'rgba(0, 230, 118, 0.2)',
-                        color: ev.severity === 'Critical' ? '#ff1744' : ev.severity === 'Warning' ? '#ffd600' : '#00e676',
-                        border: `1px solid ${ev.severity === 'Critical' ? '#ff1744' : ev.severity === 'Warning' ? '#ffd600' : '#00e676'}`
+                        background: ev.severity === 'Critical' ? '#fef2f2' : ev.severity === 'Warning' ? '#fffbeb' : '#f0fdf4',
+                        color: ev.severity === 'Critical' ? '#dc2626' : ev.severity === 'Warning' ? '#d97706' : '#16a34a',
+                        border: `1px solid ${ev.severity === 'Critical' ? '#fecaca' : ev.severity === 'Warning' ? '#fde68a' : '#bbf7d0'}`
                       }}>
                         {ev.severity}
                       </span>
                     </td>
-                    <td style={{ padding: '0.65rem 0.85rem', color: '#cbd5e1' }}>
+                    <td style={{ padding: '0.65rem 0.85rem', color: '#334155' }}>
                       {ev.description}
                     </td>
                     <td style={{ padding: '0.65rem 0.85rem' }}>
@@ -145,9 +146,9 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
                         <button
                           onClick={() => setSelectedPhoto(ev.capturedImage || null)}
                           style={{
-                            background: 'rgba(0, 240, 255, 0.12)',
-                            border: '1px solid #00f0ff',
-                            color: '#00f0ff',
+                            background: '#f0f9ff',
+                            border: '1px solid #bae6fd',
+                            color: '#0284c7',
                             padding: '0.25rem 0.5rem',
                             borderRadius: '4px',
                             fontSize: '0.72rem',
@@ -160,7 +161,7 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
                           <Eye size={12} /> View Photo
                         </button>
                       ) : (
-                        <span style={{ color: '#64748b', fontSize: '0.72rem' }}>N/A</span>
+                        <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>N/A</span>
                       )}
                     </td>
                   </tr>
@@ -174,10 +175,10 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
         {selectedPhoto && (
           <div style={{
             marginTop: '1rem',
-            background: '#070a12',
+            background: '#f8fafc',
             padding: '0.75rem',
             borderRadius: '8px',
-            border: '1px solid rgba(0, 240, 255, 0.3)',
+            border: '1px solid #bae6fd',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center'
@@ -185,7 +186,7 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
             <img src={selectedPhoto} alt="Captured Event" style={{ maxHeight: '200px', borderRadius: '6px' }} />
             <button
               onClick={() => setSelectedPhoto(null)}
-              style={{ marginTop: '0.5rem', background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.75rem' }}
+              style={{ marginTop: '0.5rem', background: '#e2e8f0', color: '#0f172a', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}
             >
               Close Photo Preview
             </button>
@@ -195,7 +196,7 @@ export const EventHistoryModal: React.FC<EventHistoryModalProps> = ({ onClose })
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.25rem' }}>
           <button
             onClick={onClose}
-            style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', padding: '0.65rem 1.25rem', borderRadius: '8px', fontWeight: 600 }}
+            style={{ background: '#f1f5f9', color: '#334155', padding: '0.65rem 1.25rem', borderRadius: '8px', fontWeight: 600 }}
           >
             Close Logs
           </button>

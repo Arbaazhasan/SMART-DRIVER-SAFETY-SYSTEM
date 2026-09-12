@@ -21,26 +21,26 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
-              background: 'rgba(0, 240, 255, 0.15)',
-              color: '#00f0ff',
+              background: '#f0f9ff',
+              color: '#0284c7',
               padding: '0.6rem',
               borderRadius: '10px',
-              border: '1px solid rgba(0, 240, 255, 0.3)'
+              border: '1px solid #bae6fd'
             }}>
               <Award size={26} />
             </div>
             <div>
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a' }}>
                 Driving Session Summary
               </h2>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8', fontFamily: 'monospace' }}>
+              <p style={{ fontSize: '0.82rem', color: '#64748b', fontFamily: 'monospace' }}>
                 ID: {session.id} | {session.startTime} - {session.endTime || 'Now'}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'rgba(255, 255, 255, 0.08)', border: 'none', color: '#ffffff', padding: '0.4rem', borderRadius: '50%' }}
+            style={{ background: '#f1f5f9', border: 'none', color: '#64748b', padding: '0.4rem', borderRadius: '50%' }}
           >
             <X size={20} />
           </button>
@@ -49,24 +49,28 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
         {/* Primary Status Banner */}
         <div style={{
           background: session.criticalDrowsinessEvents > 0 || session.emergencyEvents > 0
-            ? 'rgba(255, 23, 68, 0.15)'
+            ? '#fef2f2'
             : session.drowsinessWarnings > 1
-            ? 'rgba(255, 214, 0, 0.15)'
-            : 'rgba(0, 230, 118, 0.15)',
+            ? '#fffbeb'
+            : '#f0fdf4',
           border: `1px solid ${
             session.criticalDrowsinessEvents > 0 || session.emergencyEvents > 0
-              ? '#ff1744'
+              ? '#fecaca'
               : session.drowsinessWarnings > 1
-              ? '#ffd600'
-              : '#00e676'
+              ? '#fde68a'
+              : '#bbf7d0'
           }`,
-          color: '#ffffff',
+          color: session.criticalDrowsinessEvents > 0 || session.emergencyEvents > 0
+            ? '#dc2626'
+            : session.drowsinessWarnings > 1
+            ? '#d97706'
+            : '#16a34a',
           padding: '1rem 1.25rem',
           borderRadius: '10px',
           marginBottom: '1.25rem',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94a3b8' }}>
+          <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
             OVERALL SAFETY ASSESSMENT
           </div>
           <div style={{ fontSize: '1.2rem', fontWeight: 900, marginTop: '0.2rem' }}>
@@ -76,38 +80,38 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
 
         {/* Telemetry Metrics Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '1.25rem' }}>
-          <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <Clock size={14} color="#00f0ff" /> Total Duration
+          <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Clock size={14} color="#0284c7" /> Total Duration
             </div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#00f0ff', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0284c7', marginTop: '0.2rem' }}>
               {formatDuration(session.durationSec)}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <AlertTriangle size={14} color="#ffd600" /> Drowsiness Warnings
+          <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <AlertTriangle size={14} color="#d97706" /> Drowsiness Warnings
             </div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffd600', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#d97706', marginTop: '0.2rem' }}>
               {session.drowsinessWarnings}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <Activity size={14} color="#ff1744" /> Critical Drowsiness Events
+          <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Activity size={14} color="#dc2626" /> Critical Drowsiness Events
             </div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ff1744', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#dc2626', marginTop: '0.2rem' }}>
               {session.criticalDrowsinessEvents}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '0.85rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <Siren size={14} color="#a855f7" /> Emergency Events
+          <div style={{ background: '#f8fafc', padding: '0.85rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Siren size={14} color="#9333ea" /> Emergency Events
             </div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#a855f7', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#9333ea', marginTop: '0.2rem' }}>
               {session.emergencyEvents}
             </div>
           </div>
@@ -119,10 +123,10 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            background: 'rgba(10, 15, 26, 0.7)',
+            background: '#f8fafc',
             padding: '0.75rem',
             borderRadius: '8px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid #e2e8f0',
             marginBottom: '1.25rem'
           }}>
             <img
@@ -131,8 +135,8 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
               style={{ width: '64px', height: '64px', borderRadius: '6px', objectFit: 'cover' }}
             />
             <div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#ffffff' }}>Driver Baseline Registered</div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a' }}>Driver Baseline Registered</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
                 Baseline EAR: {session.baselineFaceStats?.eyeOpennessRatio || 0.35} | Captured at drive start
               </div>
             </div>
@@ -143,8 +147,8 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({ sessio
           <button
             onClick={onClose}
             style={{
-              background: 'linear-gradient(135deg, #00f0ff 0%, #0077ff 100%)',
-              color: '#090c15',
+              background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+              color: '#ffffff',
               padding: '0.65rem 1.5rem',
               borderRadius: '8px',
               fontWeight: 800,

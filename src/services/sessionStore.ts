@@ -18,9 +18,9 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_EMERGENCY_CONTACT: EmergencyContact = {
-  name: 'Dr. Sarah Connor (Parent / Guardian)',
+  name: 'Emergency Contact Person',
   phone: '+1 (555) 019-2834',
-  email: 'guardian@exhibition-demo.org',
+  email: 'guardian@driversafety.app',
 };
 
 const DEFAULT_HELP_NUMBER: HelpNumber = {

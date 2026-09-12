@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { Dashboard } from './components/Dashboard';
-import { ExhibitionDemoPanel } from './components/ExhibitionDemoPanel';
 import { BaselineModal } from './components/BaselineModal';
 import { EmergencyModal } from './components/EmergencyModal';
 import { SessionSummaryModal } from './components/SessionSummaryModal';
@@ -16,7 +15,6 @@ import { sessionStore } from './services/sessionStore';
 import { audioService } from './services/audioService';
 import type { 
   DrivingSession, 
-  ExhibitionScenario, 
   SafetyEvent, 
   LocationData, 
   BaselineFaceStats 
@@ -26,7 +24,6 @@ export const App: React.FC = () => {
   // Drive State
   const [isDriveActive, setIsDriveActive] = useState<boolean>(false);
   const [activeSession, setActiveSession] = useState<DrivingSession | null>(sessionStore.getActiveSession());
-  const [activeScenario, setActiveScenario] = useState<ExhibitionScenario | null>(null);
 
   // Camera & Telemetry
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -97,11 +94,12 @@ export const App: React.FC = () => {
   }, [isCameraActive]);
 
   // Log Safety Event Helper
+  // Log Safety Event Helper
   const logSafetyEvent = useCallback((eventType: string, severity: 'Normal' | 'Warning' | 'Critical', description: string, snapshotImage?: string) => {
     const now = new Date();
     const event: SafetyEvent = {
       id: `EVT-${Date.now()}`,
-      sessionId: activeSession?.id || 'EXHIBITION-DEMO',
+      sessionId: activeSession?.id || 'DEMO-SESSION',
       timestamp: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       dateTime: now.toLocaleString(),
       eventType,
@@ -185,18 +183,18 @@ export const App: React.FC = () => {
         return canvas.toDataURL('image/jpeg', 0.85);
       }
     }
-    // Fallback cyber emergency frame
+    // Fallback emergency frame
     const canvas = document.createElement('canvas');
     canvas.width = 640;
     canvas.height = 480;
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      ctx.fillStyle = '#160a12';
+      ctx.fillStyle = '#fef2f2';
       ctx.fillRect(0, 0, 640, 480);
-      ctx.strokeStyle = '#ff1744';
+      ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 4;
       ctx.strokeRect(40, 40, 560, 400);
-      ctx.fillStyle = '#ff1744';
+      ctx.fillStyle = '#dc2626';
       ctx.font = 'bold 24px sans-serif';
       ctx.fillText('🚨 EMERGENCY CAMERA CAPTURE', 120, 240);
     }
@@ -222,7 +220,6 @@ export const App: React.FC = () => {
     setIsDriveActive(false);
     audioService.stopAlarm();
     faceDetectorService.setSimulationScenario(null);
-    setActiveScenario(null);
 
     const summary = sessionStore.endActiveSession();
     if (summary) {
@@ -232,7 +229,7 @@ export const App: React.FC = () => {
     setActiveSession(null);
   };
 
-  // Manual / Simulated Emergency Trigger (Req #5, #6)
+  // Manual / Simulated Emergency Trigger
   const triggerEmergencyWorkflow = useCallback((type: string) => {
     audioService.playEmergencySiren(sessionStore.getThresholdSettings().alarmVolume);
     const snapshot = captureSnapshot();
@@ -249,40 +246,6 @@ export const App: React.FC = () => {
     );
   }, [logSafetyEvent]);
 
-  // Science Exhibition Scenario Triggers (Req #14)
-  const handleTriggerScenario = (scenario: ExhibitionScenario) => {
-    setActiveScenario(scenario);
-    faceDetectorService.setSimulationScenario(scenario);
-
-    if (!isDriveActive) {
-      // Auto-start temporary drive session for demonstration
-      const demoSession = sessionStore.createSession();
-      setActiveSession(demoSession);
-      setIsDriveActive(true);
-    }
-
-    if (scenario === 'SCENARIO_1_NORMAL') {
-      audioService.stopAlarm();
-      logSafetyEvent('Demo Scenario 1', 'Normal', 'Exhibition Demo: Normal Driver Alert.');
-    } else if (scenario === 'SCENARIO_2_WARNING') {
-      audioService.playWarningSound();
-      logSafetyEvent('Demo Scenario 2', 'Warning', 'Exhibition Demo: Drowsiness Warning (Yawning/Head Drop).');
-    } else if (scenario === 'SCENARIO_3_CRITICAL') {
-      audioService.playCriticalAlarm();
-      logSafetyEvent('Demo Scenario 3', 'Critical', 'Exhibition Demo: Critical Drowsiness Alarm (~2s repeated eye closure).');
-    } else if (scenario === 'SCENARIO_4_EMERGENCY') {
-      triggerEmergencyWorkflow('Simulated Vehicle Emergency / Crash');
-    } else if (scenario === 'SCENARIO_5_INJURY') {
-      triggerEmergencyWorkflow('Experimental Possible Injury Detection');
-    }
-  };
-
-  const handleResetDemo = () => {
-    faceDetectorService.setSimulationScenario(null);
-    setActiveScenario(null);
-    audioService.stopAlarm();
-  };
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-main)' }}>
       {/* Top Navbar */}
@@ -296,14 +259,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Cockpit Layout */}
-      <main style={{ flex: 1, padding: '1.5rem', maxWidth: '1440px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {/* Exhibition Demo Controller Panel */}
-        <ExhibitionDemoPanel
-          activeScenario={activeScenario}
-          onTriggerScenario={handleTriggerScenario}
-          onResetDemo={handleResetDemo}
-        />
-
+      <main className="main-content-container" style={{ flex: 1, padding: '1.5rem', maxWidth: '1440px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {/* Central Safety Cockpit Dashboard */}
         <Dashboard
           isDriveActive={isDriveActive}

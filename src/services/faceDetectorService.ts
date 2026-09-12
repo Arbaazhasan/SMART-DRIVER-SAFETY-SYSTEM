@@ -507,7 +507,7 @@ export class FaceDetectorService {
     // Clear previous frame drawings
     ctx.clearRect(0, 0, w, h);
 
-    const themeColor = driverState === 'CRITICAL' ? '#ff1744' : driverState === 'WARNING' ? '#ffd600' : '#00f0ff';
+    const themeColor = driverState === 'CRITICAL' ? '#dc2626' : driverState === 'WARNING' ? '#d97706' : '#0284c7';
     ctx.strokeStyle = themeColor;
     ctx.lineWidth = 3;
 
@@ -528,7 +528,7 @@ export class FaceDetectorService {
 
       // Draw Lip contour points
       const lipIndices = [UPPER_LIP, LOWER_LIP, MOUTH_LEFT, MOUTH_RIGHT];
-      ctx.fillStyle = '#ffd600';
+      ctx.fillStyle = '#d97706';
       lipIndices.forEach(idx => {
         const pt = lm[idx];
         ctx.beginPath();
@@ -558,7 +558,7 @@ export class FaceDetectorService {
       ctx.strokeRect(boxX, boxY, boxW, boxH);
 
       // HUD Label
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#0f172a';
       ctx.font = 'bold 14px monospace';
       ctx.fillText(`EAR: ${stats.ear.toFixed(2)} | MAR: ${stats.mar.toFixed(2)}`, boxX, boxY - 10);
       ctx.fillText(`TILT: ${Math.round(stats.headTiltAngle)}°`, boxX + boxW - 80, boxY - 10);
@@ -582,7 +582,7 @@ export class FaceDetectorService {
       ctx.fillRect(boxX + boxW - cornerSize + 2, boxY + boxH - 2, cornerSize, 4);
       ctx.fillRect(boxX + boxW - 2, boxY + boxH - cornerSize + 2, 4, cornerSize);
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#0f172a';
       ctx.font = 'bold 14px monospace';
       ctx.fillText(`EAR: ${stats.ear.toFixed(2)} | MAR: ${stats.mar.toFixed(2)}`, boxX, boxY - 12);
       ctx.fillText(`TILT: ${Math.round(stats.headTiltAngle)}°`, boxX + boxW - 80, boxY - 12);
@@ -633,10 +633,10 @@ export class FaceDetectorService {
 
     ctx.clearRect(0, 0, w, h);
 
-    ctx.fillStyle = '#0b0f19';
+    ctx.fillStyle = '#f8fafc';
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+    ctx.strokeStyle = '#e2e8f0';
     ctx.lineWidth = 1;
     for (let x = 0; x < w; x += 40) {
       ctx.beginPath();
@@ -655,13 +655,13 @@ export class FaceDetectorService {
     const cy = h / 2 - 20;
     const radius = 80;
 
-    ctx.strokeStyle = telemetry.driverState === 'CRITICAL' ? '#ff1744' : telemetry.driverState === 'WARNING' ? '#ffd600' : '#00e676';
+    ctx.strokeStyle = telemetry.driverState === 'CRITICAL' ? '#dc2626' : telemetry.driverState === 'WARNING' ? '#d97706' : '#16a34a';
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.stroke();
 
-    ctx.fillStyle = telemetry.eyeStatus === 'CLOSED' ? '#ff1744' : '#00f0ff';
+    ctx.fillStyle = telemetry.eyeStatus === 'CLOSED' ? '#dc2626' : '#0284c7';
     if (telemetry.eyeStatus === 'CLOSED') {
       ctx.fillRect(cx - 40, cy - 15, 25, 4);
       ctx.fillRect(cx + 15, cy - 15, 25, 4);
@@ -673,25 +673,25 @@ export class FaceDetectorService {
     }
 
     if (telemetry.yawnStatus === 'DETECTED') {
-      ctx.strokeStyle = '#ffd600';
-      ctx.fillStyle = 'rgba(255, 214, 0, 0.2)';
+      ctx.strokeStyle = '#d97706';
+      ctx.fillStyle = 'rgba(217, 119, 6, 0.15)';
       ctx.beginPath();
       ctx.ellipse(cx, cy + 30, 15, 25, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     } else {
-      ctx.strokeStyle = '#00f0ff';
+      ctx.strokeStyle = '#0284c7';
       ctx.beginPath();
       ctx.arc(cx, cy + 25, 20, 0.1, Math.PI - 0.1);
       ctx.stroke();
     }
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#0f172a';
     ctx.font = 'bold 16px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🎓 SCIENCE EXHIBITION DEMO MODE', cx, 35);
+    ctx.fillText('⚡ LIVE SIMULATION MODE', cx, 35);
     ctx.font = '14px monospace';
-    ctx.fillStyle = '#00f0ff';
+    ctx.fillStyle = '#0284c7';
     ctx.fillText(`TELEMETRY: EAR=${telemetry.earValue} MAR=${telemetry.marValue}`, cx, h - 25);
     ctx.textAlign = 'left';
   }

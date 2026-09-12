@@ -24,7 +24,6 @@ export const CameraView: React.FC<CameraViewProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space' && !e.repeat) {
-        // Prevent scroll if not inside input
         if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
           e.preventDefault();
           faceDetectorService.setManualEyeClosedOverride(true);
@@ -47,7 +46,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
   }, []);
 
   return (
-    <div className="cockpit-card hud-scanline" style={{
+    <div className="cockpit-card hud-scanline hud-camera-container" style={{
       position: 'relative',
       height: '100%',
       minHeight: '380px',
@@ -69,10 +68,10 @@ export const CameraView: React.FC<CameraViewProps> = ({
             width: '10px',
             height: '10px',
             borderRadius: '50%',
-            background: isDriveActive ? '#00e676' : '#94a3b8',
-            boxShadow: isDriveActive ? '0 0 10px #00e676' : 'none'
+            background: isDriveActive ? '#16a34a' : '#94a3b8',
+            boxShadow: isDriveActive ? '0 0 10px rgba(22, 163, 74, 0.4)' : 'none'
           }} />
-          <span style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.05em', color: '#ffffff' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.05em', color: '#0f172a' }}>
             IN-CAR CAM HUD FEED
           </span>
         </div>
@@ -86,9 +85,9 @@ export const CameraView: React.FC<CameraViewProps> = ({
               onTouchStart={() => faceDetectorService.setManualEyeClosedOverride(true)}
               onTouchEnd={() => faceDetectorService.setManualEyeClosedOverride(false)}
               style={{
-                background: telemetry.eyeStatus === 'CLOSED' ? 'rgba(255, 23, 68, 0.3)' : 'rgba(255, 255, 255, 0.08)',
-                border: `1px solid ${telemetry.eyeStatus === 'CLOSED' ? '#ff1744' : 'rgba(255, 255, 255, 0.2)'}`,
-                color: telemetry.eyeStatus === 'CLOSED' ? '#ff1744' : '#ffd600',
+                background: telemetry.eyeStatus === 'CLOSED' ? '#fef2f2' : '#f8fafc',
+                border: `1px solid ${telemetry.eyeStatus === 'CLOSED' ? '#dc2626' : '#cbd5e1'}`,
+                color: telemetry.eyeStatus === 'CLOSED' ? '#dc2626' : '#d97706',
                 padding: '0.35rem 0.75rem',
                 borderRadius: '6px',
                 fontSize: '0.78rem',
@@ -107,9 +106,9 @@ export const CameraView: React.FC<CameraViewProps> = ({
           <button
             onClick={onToggleCamera}
             style={{
-              background: isCameraActive ? 'rgba(0, 240, 255, 0.12)' : 'rgba(255, 255, 255, 0.08)',
-              border: `1px solid ${isCameraActive ? 'rgba(0, 240, 255, 0.3)' : 'rgba(255, 255, 255, 0.15)'}`,
-              color: isCameraActive ? '#00f0ff' : '#94a3b8',
+              background: isCameraActive ? '#f0f9ff' : '#f8fafc',
+              border: `1px solid ${isCameraActive ? '#bae6fd' : '#cbd5e1'}`,
+              color: isCameraActive ? '#0284c7' : '#64748b',
               padding: '0.35rem 0.75rem',
               borderRadius: '6px',
               fontSize: '0.78rem',
@@ -132,8 +131,8 @@ export const CameraView: React.FC<CameraViewProps> = ({
         width: '100%',
         borderRadius: '10px',
         overflow: 'hidden',
-        background: '#070a12',
-        border: '1px solid rgba(0, 240, 255, 0.2)',
+        background: '#f1f5f9',
+        border: '1px solid #e2e8f0',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -165,24 +164,25 @@ export const CameraView: React.FC<CameraViewProps> = ({
             />
           </>
         ) : (
-          <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
-            <CameraOff size={48} color="#64748b" style={{ marginBottom: '0.75rem' }} />
-            <p style={{ fontSize: '0.95rem', fontWeight: 600, color: '#e2e8f0' }}>Webcam Feed Offline / Simulated</p>
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+            <CameraOff size={48} color="#94a3b8" style={{ marginBottom: '0.75rem' }} />
+            <p style={{ fontSize: '0.95rem', fontWeight: 600, color: '#1e293b' }}>Webcam Feed Offline / Simulated</p>
             <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>
-              Exhibition Demo Mode can run telemetries without webcam hardware
+              Simulation Mode can run telemetry without webcam hardware
             </p>
           </div>
         )}
 
-        {/* Warning Banner when Driver Face Not Detected (Req #4) */}
+        {/* Warning Banner when Driver Face Not Detected */}
         {isDriveActive && !telemetry.faceDetected && (
           <div style={{
             position: 'absolute',
             top: '1rem',
             left: '50%',
             transform: 'translateX(-50%)',
-            background: 'rgba(255, 214, 0, 0.95)',
-            color: '#090c15',
+            background: '#fffbeb',
+            border: '1px solid #fde68a',
+            color: '#b45309',
             padding: '0.5rem 1.25rem',
             borderRadius: '20px',
             fontWeight: 800,
@@ -190,7 +190,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            boxShadow: '0 0 20px rgba(255, 214, 0, 0.6)',
+            boxShadow: '0 4px 14px rgba(217, 119, 6, 0.25)',
             zIndex: 30
           }}>
             <AlertTriangle size={18} /> ⚠️ DRIVER FACE NOT DETECTED — PLEASE ADJUST POSITION
@@ -204,9 +204,10 @@ export const CameraView: React.FC<CameraViewProps> = ({
             bottom: '0.75rem',
             left: '0.75rem',
             right: '0.75rem',
-            background: 'rgba(10, 15, 26, 0.85)',
+            background: 'rgba(255, 255, 255, 0.92)',
             backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(0, 240, 255, 0.3)',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
             borderRadius: '8px',
             padding: '0.4rem 0.8rem',
             display: 'flex',
@@ -214,20 +215,20 @@ export const CameraView: React.FC<CameraViewProps> = ({
             justifyContent: 'space-between',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.78rem',
-            color: '#00f0ff'
+            color: '#0284c7'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Eye size={14} color={telemetry.eyeStatus === 'CLOSED' ? '#ff1744' : '#00f0ff'} />
-              <span style={{ color: telemetry.eyeStatus === 'CLOSED' ? '#ff1744' : '#00f0ff', fontWeight: 800 }}>
+              <Eye size={14} color={telemetry.eyeStatus === 'CLOSED' ? '#dc2626' : '#0284c7'} />
+              <span style={{ color: telemetry.eyeStatus === 'CLOSED' ? '#dc2626' : '#0284c7', fontWeight: 800 }}>
                 EAR: {telemetry.earValue.toFixed(2)} ({telemetry.eyeStatus})
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Activity size={14} color="#ffd600" />
-              <span>MAR: {telemetry.marValue.toFixed(2)} ({telemetry.yawnStatus})</span>
+              <Activity size={14} color="#d97706" />
+              <span style={{ color: '#d97706', fontWeight: 700 }}>MAR: {telemetry.marValue.toFixed(2)} ({telemetry.yawnStatus})</span>
             </div>
             <div>
-              <span>TILT: {telemetry.headTiltAngle}°</span>
+              <span style={{ color: '#475569', fontWeight: 700 }}>TILT: {telemetry.headTiltAngle}°</span>
             </div>
           </div>
         )}
