@@ -58,14 +58,9 @@ declare global {
 
 export class FaceDetectorService {
   private eyeClosedStartTime: number | null = null;
-  private recentClosures: number[] = []; // Timestamps of long eye closures
   private yawnStartTime: number | null = null;
   private simulationScenario: string | null = null;
   private canvasCtx: CanvasRenderingContext2D | null = null;
-
-  // 5-Second Post Eye-Opening Alarm Sustain tracking
-  private eyeReopenedTime: number | null = null;
-  private sustainState: DriverState | null = null;
 
   // MediaPipe FaceMesh state
   private faceMeshInstance: any = null;
@@ -87,8 +82,6 @@ export class FaceDetectorService {
     if (!scenario) {
       this.eyeClosedStartTime = null;
       this.yawnStartTime = null;
-      this.eyeReopenedTime = null;
-      this.sustainState = null;
     }
   }
 
@@ -208,30 +201,19 @@ export class FaceDetectorService {
       };
     }
 
-    // Process Eye Closure logic with anti-false alarm threshold & 5s post-eye-opening alarm sustain
+    // Process Eye Closure logic
     const isEyesClosed = faceStats.ear < 0.21;
     let eyeClosureDuration = 0;
 
     if (isEyesClosed) {
-      this.eyeReopenedTime = null;
       if (this.eyeClosedStartTime === null) {
         this.eyeClosedStartTime = currentTimeSec;
       } else {
         eyeClosureDuration = currentTimeSec - this.eyeClosedStartTime;
       }
     } else {
-      if (this.eyeClosedStartTime !== null) {
-        const totalDuration = currentTimeSec - this.eyeClosedStartTime;
-        if (totalDuration >= thresholds.eyeClosureDurationWarning) {
-          this.recentClosures.push(currentTimeSec);
-          this.recentClosures = this.recentClosures.filter(
-            t => currentTimeSec - t <= thresholds.monitoringWindowSec
-          );
-        }
-        // Driver just opened eyes after a closure! Start 5s alarm sustain timer
-        this.eyeReopenedTime = currentTimeSec;
-        this.eyeClosedStartTime = null;
-      }
+      // Driver opened eyes! Clear eye closure tracking instantly
+      this.eyeClosedStartTime = null;
     }
 
     // Yawning logic
@@ -245,34 +227,21 @@ export class FaceDetectorService {
     // Head posture logic
     const isHeadAbnormal = Math.abs(faceStats.headTiltAngle) > thresholds.headTiltAngleDeg || faceStats.headDropRatio > 0.25;
 
-    // Determine Base Driver State
-    let rawState: DriverState = 'ALERT';
-    if (eyeClosureDuration >= thresholds.eyeClosureDurationCritical || this.recentClosures.length >= thresholds.repeatedClosureCount) {
-      rawState = 'CRITICAL';
-    } else if (eyeClosureDuration >= thresholds.eyeClosureDurationWarning || isYawning || isHeadAbnormal) {
-      rawState = 'WARNING';
-    }
+    // Determine Driver State (ALERT immediately when eyes are open and features normal)
+    let driverState: DriverState = 'ALERT';
 
-    // 5-Second Post Eye-Opening Alarm Sustain Logic
-    let driverState: DriverState = rawState;
-    let alarmSustainSec = 0;
-
-    if (rawState !== 'ALERT') {
-      this.sustainState = rawState;
-    } else if (this.eyeReopenedTime !== null && this.sustainState !== null) {
-      const elapsedSinceOpened = currentTimeSec - this.eyeReopenedTime;
-      if (elapsedSinceOpened < 5.0) {
-        driverState = this.sustainState; // Keep playing alarm for 5 seconds after eyes open!
-        alarmSustainSec = Number((5.0 - elapsedSinceOpened).toFixed(1));
-      } else {
-        this.eyeReopenedTime = null;
-        this.sustainState = null;
-        driverState = 'ALERT';
+    if (isEyesClosed) {
+      if (eyeClosureDuration >= thresholds.eyeClosureDurationCritical) {
+        driverState = 'CRITICAL';
+      } else if (eyeClosureDuration >= thresholds.eyeClosureDurationWarning) {
+        driverState = 'WARNING';
       }
+    } else if (isYawning || isHeadAbnormal) {
+      driverState = 'WARNING';
     }
 
     // Draw Live HUD Overlay on Canvas
-    this.drawLiveHUD(canvasEl, faceStats, driverState, eyeClosureDuration, alarmSustainSec);
+    this.drawLiveHUD(canvasEl, faceStats, driverState, eyeClosureDuration, 0);
 
     return {
       faceDetected: true,
@@ -287,7 +256,7 @@ export class FaceDetectorService {
       marValue: Number(faceStats.mar.toFixed(2)),
       experimentalInjuryDetected: faceStats.experimentalInjuryDetected,
       injuryConfidenceScore: faceStats.injuryConfidence,
-      alarmSustainSec,
+      alarmSustainSec: 0,
     };
   }
 
@@ -395,14 +364,9 @@ export class FaceDetectorService {
 
         const totalSampled = (data.length / 16);
         const avgBrightness = totalBrightness / totalSampled;
-        const eyeAvgLuminance = eyePixels > 0 ? eyeRegionLuminanceSum / eyePixels : avgBrightness;
 
         if (avgBrightness < 15) {
           return { faceDetected: false, ear: 0, mar: 0, headTiltAngle: 0, headDropRatio: 0, experimentalInjuryDetected: false, injuryConfidence: 0 };
-        }
-
-        if (eyeAvgLuminance > avgBrightness * 1.08) {
-          ear = 0.12; // CLOSED
         }
 
         if (redDominancePixels > 85) {

@@ -129,7 +129,10 @@ export const App: React.FC = () => {
       setTelemetry(newTelemetry);
 
       // Sound Alarm & Event Logging logic
-      if (newTelemetry.driverState !== previousStateRef.current) {
+      if (newTelemetry.driverState === 'ALERT') {
+        audioService.stopAlarm();
+        previousStateRef.current = 'ALERT';
+      } else if (newTelemetry.driverState !== previousStateRef.current) {
         previousStateRef.current = newTelemetry.driverState;
 
         if (newTelemetry.driverState === 'WARNING') {
@@ -142,8 +145,6 @@ export const App: React.FC = () => {
           if (isDriveActive) {
             logSafetyEvent('Repeated Eye Closure (Critical)', 'Critical', 'Driver eyes closed for ~2 sec repeatedly. Alert buzzer triggered.');
           }
-        } else if (newTelemetry.driverState === 'ALERT') {
-          audioService.stopAlarm();
         }
       }
 
