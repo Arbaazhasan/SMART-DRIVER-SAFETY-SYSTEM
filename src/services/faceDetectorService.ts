@@ -62,6 +62,10 @@ export class FaceDetectorService {
   private simulationScenario: string | null = null;
   private canvasCtx: CanvasRenderingContext2D | null = null;
 
+  // 3-Second Post Eye-Opening Alarm Countdown tracking
+  private eyeReopenedTime: number | null = null;
+  private sustainState: DriverState | null = null;
+
   // MediaPipe FaceMesh state
   private faceMeshInstance: any = null;
   private latestLandmarks: Point2D[] | null = null;
@@ -82,6 +86,8 @@ export class FaceDetectorService {
     if (!scenario) {
       this.eyeClosedStartTime = null;
       this.yawnStartTime = null;
+      this.eyeReopenedTime = null;
+      this.sustainState = null;
     }
   }
 
@@ -201,19 +207,23 @@ export class FaceDetectorService {
       };
     }
 
-    // Process Eye Closure logic
+    // Process Eye Closure logic with 3-second post-eye-opening alarm countdown
     const isEyesClosed = faceStats.ear < 0.21;
     let eyeClosureDuration = 0;
 
     if (isEyesClosed) {
+      this.eyeReopenedTime = null;
       if (this.eyeClosedStartTime === null) {
         this.eyeClosedStartTime = currentTimeSec;
       } else {
         eyeClosureDuration = currentTimeSec - this.eyeClosedStartTime;
       }
     } else {
-      // Driver opened eyes! Clear eye closure tracking instantly
-      this.eyeClosedStartTime = null;
+      if (this.eyeClosedStartTime !== null) {
+        // Driver just opened eyes after an eye-closure duration
+        this.eyeReopenedTime = currentTimeSec;
+        this.eyeClosedStartTime = null;
+      }
     }
 
     // Yawning logic
@@ -227,21 +237,39 @@ export class FaceDetectorService {
     // Head posture logic
     const isHeadAbnormal = Math.abs(faceStats.headTiltAngle) > thresholds.headTiltAngleDeg || faceStats.headDropRatio > 0.25;
 
-    // Determine Driver State (ALERT immediately when eyes are open and features normal)
-    let driverState: DriverState = 'ALERT';
-
+    // Determine Base State
+    let rawState: DriverState = 'ALERT';
     if (isEyesClosed) {
       if (eyeClosureDuration >= thresholds.eyeClosureDurationCritical) {
-        driverState = 'CRITICAL';
+        rawState = 'CRITICAL';
       } else if (eyeClosureDuration >= thresholds.eyeClosureDurationWarning) {
-        driverState = 'WARNING';
+        rawState = 'WARNING';
       }
     } else if (isYawning || isHeadAbnormal) {
-      driverState = 'WARNING';
+      rawState = 'WARNING';
+    }
+
+    // 3-Second Post Eye-Opening Alarm Countdown
+    let driverState: DriverState = rawState;
+    let alarmSustainSec = 0;
+
+    if (rawState !== 'ALERT') {
+      this.sustainState = rawState;
+    } else if (this.eyeReopenedTime !== null && this.sustainState !== null) {
+      const elapsedSinceOpened = currentTimeSec - this.eyeReopenedTime;
+      if (elapsedSinceOpened < 3.0) {
+        driverState = this.sustainState; // Sustain alarm for exactly 3 seconds after opening eyes
+        alarmSustainSec = Number((3.0 - elapsedSinceOpened).toFixed(1));
+      } else {
+        // 3 seconds elapsed — turn off alarm!
+        this.eyeReopenedTime = null;
+        this.sustainState = null;
+        driverState = 'ALERT';
+      }
     }
 
     // Draw Live HUD Overlay on Canvas
-    this.drawLiveHUD(canvasEl, faceStats, driverState, eyeClosureDuration, 0);
+    this.drawLiveHUD(canvasEl, faceStats, driverState, eyeClosureDuration, alarmSustainSec);
 
     return {
       faceDetected: true,
@@ -256,7 +284,7 @@ export class FaceDetectorService {
       marValue: Number(faceStats.mar.toFixed(2)),
       experimentalInjuryDetected: faceStats.experimentalInjuryDetected,
       injuryConfidenceScore: faceStats.injuryConfidence,
-      alarmSustainSec: 0,
+      alarmSustainSec,
     };
   }
 

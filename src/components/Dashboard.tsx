@@ -76,7 +76,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </div>
                 <div style={{ fontSize: '0.92rem', fontWeight: 700, marginTop: '2px' }}>
                   {telemetry.alarmSustainSec && telemetry.alarmSustainSec > 0
-                    ? `👀 EYES OPENED — ALARM SUSTAINING FOR 5 SECONDS (${telemetry.alarmSustainSec}s)`
+                    ? `👀 EYES OPENED — ALARM STOPPING IN 3 SECONDS (${telemetry.alarmSustainSec}s)`
                     : 'WAKE UP! PLEASE STOP AND TAKE A BREAK.'}
                 </div>
               </div>
