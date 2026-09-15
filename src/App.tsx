@@ -60,6 +60,17 @@ export const App: React.FC = () => {
 
   const previousStateRef = useRef<string>('ALERT');
 
+  // Stable Refs for renderLoop to prevent unnecessary re-subscribing & timer resets
+  const isDriveActiveRef = useRef<boolean>(isDriveActive);
+  useEffect(() => {
+    isDriveActiveRef.current = isDriveActive;
+  }, [isDriveActive]);
+
+  const activeSessionRef = useRef<DrivingSession | null>(activeSession);
+  useEffect(() => {
+    activeSessionRef.current = activeSession;
+  }, [activeSession]);
+
   // Initialize Real Webcam stream if allowed
   useEffect(() => {
     let active = true;
@@ -93,13 +104,12 @@ export const App: React.FC = () => {
     return () => { active = false; };
   }, [isCameraActive]);
 
-  // Log Safety Event Helper
-  // Log Safety Event Helper
+  // Log Safety Event Helper (Stable callback reference)
   const logSafetyEvent = useCallback((eventType: string, severity: 'Normal' | 'Warning' | 'Critical', description: string, snapshotImage?: string) => {
     const now = new Date();
     const event: SafetyEvent = {
       id: `EVT-${Date.now()}`,
-      sessionId: activeSession?.id || 'DEMO-SESSION',
+      sessionId: activeSessionRef.current?.id || sessionStore.getActiveSession()?.id || 'DEMO-SESSION',
       timestamp: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       dateTime: now.toLocaleString(),
       eventType,
@@ -108,15 +118,15 @@ export const App: React.FC = () => {
       capturedImage: snapshotImage,
     };
     sessionStore.addSafetyEvent(event);
-  }, [activeSession]);
+  }, []);
 
   // Main Frame Processing Loop
   useEffect(() => {
     let animationFrameId: number;
-    const startTime = Date.now();
 
     const renderLoop = () => {
-      const currentTimeSec = (Date.now() - startTime) / 1000;
+      // Use continuous absolute seconds so time tracking survives React state updates
+      const currentTimeSec = Date.now() / 1000;
       const thresholds = sessionStore.getThresholdSettings();
 
       const newTelemetry = faceDetectorService.processVideoFrame(
@@ -137,12 +147,12 @@ export const App: React.FC = () => {
 
         if (newTelemetry.driverState === 'WARNING') {
           audioService.playWarningSound(thresholds.alarmVolume);
-          if (isDriveActive) {
+          if (isDriveActiveRef.current) {
             logSafetyEvent('Drowsiness Warning', 'Warning', 'Long eye closure or repeated yawning detected.');
           }
         } else if (newTelemetry.driverState === 'CRITICAL') {
           audioService.playCriticalAlarm(thresholds.alarmVolume);
-          if (isDriveActive) {
+          if (isDriveActiveRef.current) {
             logSafetyEvent('Repeated Eye Closure (Critical)', 'Critical', 'Driver eyes closed for ~2 sec repeatedly. Alert buzzer triggered.');
           }
         }
@@ -156,7 +166,7 @@ export const App: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isDriveActive, logSafetyEvent]);
+  }, [logSafetyEvent]);
 
   // Session Duration Timer
   useEffect(() => {
@@ -210,6 +220,8 @@ export const App: React.FC = () => {
   // Complete Baseline -> Start Drive
   const handleCompleteBaseline = (baselineImage: string, stats: BaselineFaceStats) => {
     setShowBaselineModal(false);
+    faceDetectorService.resetState();
+    previousStateRef.current = 'ALERT';
     const newSession = sessionStore.createSession(baselineImage, stats);
     setActiveSession(newSession);
     setIsDriveActive(true);
@@ -220,7 +232,9 @@ export const App: React.FC = () => {
   const handleEndDrive = () => {
     setIsDriveActive(false);
     audioService.stopAlarm();
+    faceDetectorService.resetState();
     faceDetectorService.setSimulationScenario(null);
+    previousStateRef.current = 'ALERT';
 
     const summary = sessionStore.endActiveSession();
     if (summary) {

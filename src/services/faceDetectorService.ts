@@ -81,13 +81,18 @@ export class FaceDetectorService {
     this.manualEyeClosedOverride = closed;
   }
 
+  public resetState() {
+    this.eyeClosedStartTime = null;
+    this.yawnStartTime = null;
+    this.eyeReopenedTime = null;
+    this.sustainState = null;
+    this.manualEyeClosedOverride = false;
+  }
+
   public setSimulationScenario(scenario: string | null) {
     this.simulationScenario = scenario;
     if (!scenario) {
-      this.eyeClosedStartTime = null;
-      this.yawnStartTime = null;
-      this.eyeReopenedTime = null;
-      this.sustainState = null;
+      this.resetState();
     }
   }
 
@@ -216,7 +221,7 @@ export class FaceDetectorService {
       if (this.eyeClosedStartTime === null) {
         this.eyeClosedStartTime = currentTimeSec;
       } else {
-        eyeClosureDuration = currentTimeSec - this.eyeClosedStartTime;
+        eyeClosureDuration = Math.max(0, currentTimeSec - this.eyeClosedStartTime);
       }
     } else {
       if (this.eyeClosedStartTime !== null) {
